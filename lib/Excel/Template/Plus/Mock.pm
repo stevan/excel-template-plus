@@ -1,31 +1,44 @@
 
-package Excel::Template::Plus;
+package Excel::Template::Plus::Mock;
 
 use strict;
 use warnings;
 
-use Carp 'croak';
-
 our $VERSION = '0.01';
 
 sub new {
-    shift;
-    my %options = @_;
-    $options{engine} ||= 'TT';
+    my ($class, %options) = @_;
     
-    my $engine_class = 'Excel::Template::Plus::' . $options{engine};
-    eval "use $engine_class";
-    if ($@) {
-        croak "Could not load engine class ($engine_class) because " . $@;
-    }
+    # allowed options:
+    # - FILE / FILENAME
+    # - RENDERER
+    # - USE UNICODE
     
-    my $template = eval { $engine_class->new(%options) };
-    if ($@) {
-        croak "Could not create template from engine class ($engine_class) because " . $@;
-    }    
-    
-    return $template;
+    bless {
+        params => { map { uc($_) => $options{$_} } keys %options },
+    } => $class;
 }
+
+sub param {
+    my $self = shift;
+    return keys %{$self->{params}} unless @_;
+    return $self->{params}->{+(shift)} if (scalar(@_) == 1);
+    my %params = @_;
+    $self->{params}->{$_} = $params{$_} foreach keys %params;
+    $self;    
+}
+
+sub parse_xml {
+    my ($self, $file) = @_;
+    $self->{options}->{parse_xml_file} = $file;
+}
+
+*parse = \&parse_xml;
+
+sub write_file { 0 }
+sub output     { 0 }
+sub register   { 0 }
+
 
 1;
 
@@ -35,7 +48,7 @@ __END__
 
 =head1 NAME 
 
-Excel::Template::Plus - An extension to the Excel::Template module
+Excel::Template::Plus::Mock - 
 
 =head1 SYNOPSIS
 
@@ -51,14 +64,6 @@ to cpan-RT.
 
 I use L<Devel::Cover> to test the code coverage of my tests, below 
 is the L<Devel::Cover> report on this module's test suite.
-
-=head1 ACKNOWLEDGEMENTS
-
-=over 4
-
-=item This module was inspired by Excel::Template::TT
-
-=back
 
 =head1 AUTHOR
 

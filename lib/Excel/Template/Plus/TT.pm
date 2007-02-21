@@ -1,30 +1,49 @@
 
-package Excel::Template::Plus;
+package Excel::Template::Plus::TT;
 
 use strict;
 use warnings;
 
-use Carp 'croak';
+use Template    ();
+use File::Temp  ();
+use File::Slurp ();
 
 our $VERSION = '0.01';
 
-sub new {
-    shift;
-    my %options = @_;
-    $options{engine} ||= 'TT';
-    
-    my $engine_class = 'Excel::Template::Plus::' . $options{engine};
-    eval "use $engine_class";
+use base 'Excel::Template';
+
+sub parse_xml {
+    my($self, $file) = @_;
+
+    my($fh, $tempfile) = File::Temp::tempfile;
+
+    my $tt = Template->new($self->{CONFIG} || {});
+    $tt->process(
+        $file,
+        $self->{VARS} || {},
+        $fh,
+    );
+    close $fh;
+
+    $self->{tempfile} = $tempfile;
+
+    die "Template creation failed because : " . $tt->error()
+        if $tt->error();    
+
+    die "Template failed to produce any output"
+        unless -s $tempfile;    
+
+    eval { $self->Excel::Template::parse_xml($tempfile) };
     if ($@) {
-        croak "Could not load engine class ($engine_class) because " . $@;
+        warn File::Slurp::slurp($tempfile);
+        die $@;        
     }
-    
-    my $template = eval { $engine_class->new(%options) };
-    if ($@) {
-        croak "Could not create template from engine class ($engine_class) because " . $@;
-    }    
-    
-    return $template;
+}
+
+sub DESTROY {
+    my $self = shift;
+
+    unlink $self->{tempfile};
 }
 
 1;
@@ -35,7 +54,7 @@ __END__
 
 =head1 NAME 
 
-Excel::Template::Plus - An extension to the Excel::Template module
+Excel::Template::Plus::TT - An extension to the Excel::Template module
 
 =head1 SYNOPSIS
 
