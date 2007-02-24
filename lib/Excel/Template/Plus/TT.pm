@@ -18,7 +18,13 @@ subtype 'IO::Handle'
 
 has 'template' => (
     is       => 'ro',
-    isa      => 'Str | ScalarRef | GlobRef | IO::Handle',
+    # can either be a:
+    # - filename
+    # - scalar ref to string
+    # - open filehandle
+    # - an IO::Handle instance
+    # (basically anything TT takes)
+    isa      => 'Str | ScalarRef | FileHandle | IO::Handle',
     required => 1,
 );
 
@@ -105,7 +111,7 @@ sub DEMOLISH {
         if $self->_tempfile && -e $self->_tempfile;
 }
 
-1;
+no Moose; no Moose::Util::TypeConstraints; 1;
 
 __END__
 
