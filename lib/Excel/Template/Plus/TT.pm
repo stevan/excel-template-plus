@@ -29,15 +29,15 @@ has 'template' => (
 );
 
 has 'config' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub {{}},
+    is       => 'ro',
+    isa      => 'HashRef',
+    default  => sub {{}},
 );
 
 has 'params' => (
-    is      => 'rw',
-    isa     => 'HashRef',
-    default => sub {{}},
+    is       => 'rw',
+    isa      => 'HashRef',
+    default  => sub {{}},
 );
 
 ## private attributes
@@ -60,14 +60,16 @@ has '_excel_template' => (
 
 sub param {
     my $self = shift;
+    
     # if they want the list of keys ...
     return keys %{$self->params}  if scalar @_ == 0;
+    
     # if they want to fetch a key ...    
     return $self->params->{$_[0]} if scalar @_ == 1;
     
+    # otherwise they are assigning params ...
     ((scalar @_ % 2) == 0)
         || confess "parameter assignment must be an even numbered list";
-    
     my %new = @_;
     while (my ($key, $value) = each %new) {
         $self->params->{$key} = $value;
