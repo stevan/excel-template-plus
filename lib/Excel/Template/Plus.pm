@@ -11,7 +11,7 @@ sub new {
     $options{engine} ||= 'TT';
     
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
-    eval "use $engine_class";
+    eval { Moose::_load_all_classes($engine_class) };
     if ($@) {
         confess "Could not load engine class ($engine_class) because " . $@;
     }

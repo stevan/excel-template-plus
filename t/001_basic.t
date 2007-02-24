@@ -6,19 +6,14 @@ use warnings;
 use FindBin;
 use File::Spec::Functions;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
+use Test::Exception;
+use Test::Excel::Template::Plus qw(cmp_excel_files);
 
 BEGIN {
     use_ok('Excel::Template::Plus');
     use_ok('Excel::Template::Plus::TT');
 }
-
-=pod
-
-This test primarily tests the creation of the 
-template based on the engine parameter.
-
-=cut
 
 my %CONFIG = (INCLUDE_PATH => catdir($FindBin::Bin, 'templates'));
 my %PARAMS   = (
@@ -28,7 +23,7 @@ my %PARAMS   = (
 
 my $template = Excel::Template::Plus->new(
     engine   => 'TT',
-    filename => 'basic.tmpl',
+    template => 'basic.tmpl',
     config   => \%CONFIG,
     params   => \%PARAMS
 );
@@ -39,7 +34,7 @@ is_deeply
 [ sort $template->param ],
 "... got the list of template params";
 
-is 'basic.tmpl', $template->filename, '... got the filename from the template';
+is 'basic.tmpl', $template->template, '... got the template from the template';
 is_deeply \%CONFIG, $template->config, '... got the config from the template';
 is_deeply \%PARAMS, $template->params, '... got the params from the template';
 
@@ -52,5 +47,12 @@ is_deeply
 
 is 'World', $template->param('location'), '... got the location param from the template params';
 
-#$template->write_file("t/xls/test.xls");
+lives_ok {
+    $template->write_file("temp.xls");
+} '... writing the template file was successful';
+
+cmp_excel_files "temp.xls", "t/xls/001_basic.xls", '... the generated excel file was correct';
+
+unlink 'temp.xls';
+
 

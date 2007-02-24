@@ -1,6 +1,7 @@
 
 package Excel::Template::Plus::TT;
 use Moose;
+use Moose::Util::TypeConstraints;
 
 use Template    ();
 use File::Temp  ();
@@ -11,9 +12,13 @@ use Excel::Template;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-has 'filename' => (
+subtype 'IO::Handle'
+    => as 'Object'
+    => where { $_->isa('IO::Handle') };
+
+has 'template' => (
     is       => 'ro',
-    isa      => 'Str | GlobRef',
+    isa      => 'Str | ScalarRef | GlobRef | IO::Handle',
     required => 1,
 );
 
@@ -27,6 +32,24 @@ has 'params' => (
     is      => 'rw',
     isa     => 'HashRef',
     default => sub {{}},
+);
+
+## private attributes
+
+has '_tempfile' => (is => 'rw');
+
+has '_excel_template' => (
+    is      => 'ro',
+    isa     => 'Excel::Template',
+    handles => [qw[
+        output
+        write_file
+    ]],
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        $self->_prepare_excel_template;
+    }
 );
 
 sub param {
@@ -46,6 +69,42 @@ sub param {
     return;
 }
 
+sub _prepare_excel_template {
+    my $self = shift;
+
+    my($fh, $tempfile) = File::Temp::tempfile;
+
+    my $tt = Template->new($self->config);
+    $tt->process(
+        $self->template,
+        $self->params,
+        $fh,
+    );
+    close $fh;
+    
+    $self->_tempfile($tempfile);
+
+    confess "Template creation failed because : " . $tt->error()
+        if $tt->error();    
+
+    confess "Template failed to produce any output"
+        unless -s $tempfile;    
+
+    my $excel_template = eval { Excel::Template->new(filename => $tempfile) };
+    if ($@) {
+        warn File::Slurp::slurp($tempfile);
+        confess $@;        
+    }
+    
+    return $excel_template;
+}
+
+sub DEMOLISH {
+    my $self = shift;
+    unlink $self->_tempfile 
+        if $self->_tempfile && -e $self->_tempfile;
+}
+
 1;
 
 __END__
@@ -54,7 +113,7 @@ __END__
 
 =head1 NAME 
 
-Excel::Template::Plus::TT - An extension to the Excel::Template module
+Excel::Template::Plus::TT -
 
 =head1 SYNOPSIS
 
