@@ -10,7 +10,7 @@ use Test::More tests => 10;
 
 BEGIN {
     use_ok('Excel::Template::Plus');
-    use_ok('Excel::Template::Plus::Mock');
+    use_ok('Excel::Template::Plus::TT');
 }
 
 =pod
@@ -21,34 +21,36 @@ template based on the engine parameter.
 =cut
 
 my %CONFIG = (INCLUDE_PATH => catdir($FindBin::Bin, 'templates'));
-my %VARS   = (greeting => 'Hello');
+my %PARAMS   = (
+    title    => 'Canonical Example',
+    greeting => 'Hello'
+);
 
 my $template = Excel::Template::Plus->new(
-    engine   => 'Mock',
-    filename => 'test.tmpl',
+    engine   => 'TT',
+    filename => 'basic.tmpl',
     config   => \%CONFIG,
-    vars     => \%VARS
+    params   => \%PARAMS
 );
-isa_ok($template, 'Excel::Template::Plus::Mock');
+isa_ok($template, 'Excel::Template::Plus::TT');
 
 is_deeply 
-[qw/CONFIG ENGINE FILENAME VARS/],
+[qw/greeting title/],
 [ sort $template->param ],
 "... got the list of template params";
 
-is 'Mock', $template->param('ENGINE'), '... got the engine from the template params';
-is 'test.tmpl', $template->param('FILENAME'), '... got the filename from the template params';
-is_deeply \%CONFIG, $template->param('CONFIG'), '... got the config from the template params';
-is_deeply \%VARS, $template->param('VARS'), '... got the vars from the template params';
+is 'basic.tmpl', $template->filename, '... got the filename from the template';
+is_deeply \%CONFIG, $template->config, '... got the config from the template';
+is_deeply \%PARAMS, $template->params, '... got the params from the template';
 
 $template->param(location => 'World');
 
 is_deeply 
-[qw/CONFIG ENGINE FILENAME VARS location/],
+[qw/greeting location title/],
 [ sort $template->param ],
 "... got the list of template params";
 
 is 'World', $template->param('location'), '... got the location param from the template params';
 
-
+#$template->write_file("t/xls/test.xls");
 

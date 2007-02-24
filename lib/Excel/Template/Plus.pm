@@ -1,12 +1,9 @@
 
 package Excel::Template::Plus;
+use Moose;
 
-use strict;
-use warnings;
-
-use Carp 'croak';
-
-our $VERSION = '0.01';
+our $VERSION   = '0.01';
+our $AUTHORITY = 'cpan:STEVAN';
 
 sub new {
     shift;
@@ -16,12 +13,12 @@ sub new {
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
     eval "use $engine_class";
     if ($@) {
-        croak "Could not load engine class ($engine_class) because " . $@;
+        confess "Could not load engine class ($engine_class) because " . $@;
     }
     
     my $template = eval { $engine_class->new(%options) };
     if ($@) {
-        croak "Could not create template from engine class ($engine_class) because " . $@;
+        confess "Could not create template from engine class ($engine_class) because " . $@;
     }    
     
     return $template;

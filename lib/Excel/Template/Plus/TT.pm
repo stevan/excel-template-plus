@@ -1,49 +1,49 @@
 
 package Excel::Template::Plus::TT;
-
-use strict;
-use warnings;
+use Moose;
 
 use Template    ();
 use File::Temp  ();
 use File::Slurp ();
 
-our $VERSION = '0.01';
+use Excel::Template;
 
-use base 'Excel::Template';
+our $VERSION   = '0.01';
+our $AUTHORITY = 'cpan:STEVAN';
 
-sub parse_xml {
-    my($self, $file) = @_;
+has 'filename' => (
+    is       => 'ro',
+    isa      => 'Str | GlobRef',
+    required => 1,
+);
 
-    my($fh, $tempfile) = File::Temp::tempfile;
+has 'config' => (
+    is      => 'ro',
+    isa     => 'HashRef',
+    default => sub {{}},
+);
 
-    my $tt = Template->new($self->{CONFIG} || {});
-    $tt->process(
-        $file,
-        $self->{VARS} || {},
-        $fh,
-    );
-    close $fh;
+has 'params' => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    default => sub {{}},
+);
 
-    $self->{tempfile} = $tempfile;
-
-    die "Template creation failed because : " . $tt->error()
-        if $tt->error();    
-
-    die "Template failed to produce any output"
-        unless -s $tempfile;    
-
-    eval { $self->Excel::Template::parse_xml($tempfile) };
-    if ($@) {
-        warn File::Slurp::slurp($tempfile);
-        die $@;        
-    }
-}
-
-sub DESTROY {
+sub param {
     my $self = shift;
-
-    unlink $self->{tempfile};
+    # if they want the list of keys ...
+    return keys %{$self->params}  if scalar @_ == 0;
+    # if they want to fetch a key ...    
+    return $self->params->{$_[0]} if scalar @_ == 1;
+    
+    ((scalar @_ % 2) == 0)
+        || confess "parameter assignment must be an even numbered list";
+    
+    my %new = @_;
+    while (my ($key, $value) = each %new) {
+        $self->params->{$key} = $value;
+    }
+    return;
 }
 
 1;
