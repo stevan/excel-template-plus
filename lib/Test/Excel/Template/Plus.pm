@@ -9,10 +9,11 @@ use Test::Builder ();
 
 use Spreadsheet::ParseExcel;
 
-require Exporter;
+our $VERSION   = '0.01';
+our $AUTHORITY = 'cpan:STEVAN';
 
-our $VERSION = '0.01';
-our @ISA     = ('Exporter');
+require Exporter;
+our @ISA     = qw(Exporter);
 our @EXPORT  = qw(cmp_excel_files);
 
 # get the testing singleton ...

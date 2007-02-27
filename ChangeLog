@@ -1,4 +1,6 @@
 Changes for Excel::Template::Plus
 
-0.01
+0.01 
     - initial module release
+    - adapted from several in-house add-ons to 
+      Excel::Template and Excel::Template::TT

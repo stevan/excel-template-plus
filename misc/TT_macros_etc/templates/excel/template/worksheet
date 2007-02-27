@@ -1,0 +1,16 @@
+[% 
+    # This is a wrapper for basic 
+    # worksheet creation, acceptable 
+    # arguments are:
+    #   - name      (string)  -- allows empty strings
+    #   - landscape (boolean)
+    #   - portrait  (boolean)
+    # TODO:
+    #   - protected - YAGNI-ed for Rob ;)
+%]
+<worksheet
+    [%- IF name.defined %] name="[% name %]"[% END %]
+    [%- IF landscape    %] landscape="[% landscape %]"[% END %]
+    [%- IF portrait     %] portrait="[% portrait %]"[% END %]>
+[%- content -%]
+</worksheet>

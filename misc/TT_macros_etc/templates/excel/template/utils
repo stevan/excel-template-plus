@@ -1,0 +1,11 @@
+[% MACRO process_attributes(attributes) BLOCK;
+    FOREACH key = attributes.keys -%]
+        [% key %]="[% attributes.$key %]"
+    [%- END;
+END %]
+
+[% MACRO cell(value, attribs) BLOCK %]
+<cell[% process_attributes(attribs) %]>
+[%- value -%]
+</cell>
+[% END %]

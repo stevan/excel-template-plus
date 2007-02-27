@@ -1,0 +1,9 @@
+[% 
+    # This is a wrapper for basic 
+    # format creation
+    # arguments are:
+    # - attr (hash)
+%]
+<format [% FOREACH key = attr.keys %] [% key %]="[% attr.$key %]"[% END %]>
+[%- content -%]
+</format>

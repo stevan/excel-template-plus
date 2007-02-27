@@ -3,6 +3,7 @@ package Excel::Template::Plus::TT;
 use Moose;
 use Moose::Util::TypeConstraints;
 
+use FindBin;
 use Template    ();
 use File::Temp  ();
 use File::Slurp ();
@@ -35,7 +36,7 @@ has 'config' => (
 );
 
 has 'params' => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'HashRef',
     default  => sub {{}},
 );

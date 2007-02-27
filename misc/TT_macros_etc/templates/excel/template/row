@@ -1,0 +1,9 @@
+[% 
+    # This is a wrapper for basic 
+    # row creation, acceptable 
+    # arguments are:
+    #   - height (number)
+%]
+<row [%- IF height.defined %] height="[% height %]"[% END %]>
+[%- content -%]
+</row>

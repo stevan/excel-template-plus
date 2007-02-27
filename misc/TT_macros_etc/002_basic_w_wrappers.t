@@ -6,7 +6,7 @@ use warnings;
 use FindBin;
 use File::Spec::Functions;
 
-use Test::More tests => 11;
+use Test::More tests => 5;
 use Test::Exception;
 use Test::Excel::Template::Plus qw(cmp_excel_files);
 
@@ -18,6 +18,7 @@ BEGIN {
 my %CONFIG   = (
     INCLUDE_PATH => [
         catdir($FindBin::Bin, 'templates'),
+        catdir($FindBin::Bin, updir, 'templates'),        
     ]
 );
 
@@ -28,29 +29,13 @@ my %PARAMS   = (
 
 my $template = Excel::Template::Plus->new(
     engine   => 'TT',
-    template => 'basic.tmpl',
+    template => 'basic_w_wrappers.tmpl',
     config   => \%CONFIG,
     params   => \%PARAMS
 );
 isa_ok($template, 'Excel::Template::Plus::TT');
 
-is_deeply 
-[qw/greeting worksheet_name/],
-[ sort $template->param ],
-"... got the list of template params";
-
-is 'basic.tmpl', $template->template, '... got the template from the template';
-is_deeply \%CONFIG, $template->config, '... got the config from the template';
-is_deeply \%PARAMS, $template->params, '... got the params from the template';
-
 $template->param(location => 'World');
-
-is_deeply 
-[qw/greeting location worksheet_name/],
-[ sort $template->param ],
-"... got the list of template params";
-
-is 'World', $template->param('location'), '... got the location param from the template params';
 
 lives_ok {
     $template->write_file("temp.xls");
@@ -58,7 +43,7 @@ lives_ok {
 
 cmp_excel_files "temp.xls", "t/xls/001_basic.xls", '... the generated excel file was correct';
 
-#`open temp.xls`;
-unlink 'temp.xls';
+`open temp.xls`;
+#unlink 'temp.xls';
 
 

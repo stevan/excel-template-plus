@@ -8,7 +8,6 @@ our $AUTHORITY = 'cpan:STEVAN';
 sub new {
     shift;
     my %options = @_;
-    $options{engine} ||= 'TT';
     
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
     eval { Moose::_load_all_classes($engine_class) };
@@ -24,7 +23,7 @@ sub new {
     return $template;
 }
 
-1;
+no Moose; 1;
 
 __END__
 
@@ -36,7 +35,40 @@ Excel::Template::Plus - An extension to the Excel::Template module
 
 =head1 SYNOPSIS
 
+  use Excel::Template::Plus;
+  
+  my $template = Excel::Template::Plus->new(
+      engine   => 'TT',
+      template => 'greeting.tmpl',
+      config   => { INCLUDE  => [ '/templates' ] },
+      params   => { greeting => 'Hello' }
+  );
+  
+  $template->param(location => 'World');
+  
+  $template->write_file('greeting.xls');
+
 =head1 DESCRIPTION
+
+This module is an extension to the Excel::Template module. 
+
+=head1 METHODS
+
+=over 4
+
+=item B<new (%options)>
+
+This method basically serves as a factory for creating new engine instances 
+(for which L<Excel::Template::Plus::TT> is the only one currently). The only 
+parameter that it requires is I<engine>, all other parameters are passed 
+onto the engine's constructor (see the individual docs for more details on 
+what is required). 
+
+=item B<meta>
+
+Access to the metaclass. 
+
+=back
 
 =head1 BUGS
 
