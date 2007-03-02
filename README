@@ -15,17 +15,28 @@ To install this module type the following:
 DEPENDENCIES
 
 This module requires these other modules and libraries:
-
+                    
     Excel::Template
+    Template 
+    File::Temp
+    File::Slurp
+    Moose                
+
+The Test::Excel::Template::Plus module also requires:
+
+    Test::Deep
+    Spreadsheet::ParseExcel
 
 And requires these modules for testing:
 
     Test::More
     Test::Exception
+    FindBin
+    File::Spec::Functions
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006, 2007 Infinity Interactive, Inc.
+Copyright (C) 2007 Infinity Interactive, Inc.
 
 http://www.iinteractive.com
 

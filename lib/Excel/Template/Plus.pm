@@ -10,6 +10,10 @@ sub new {
     my %options = @_;
     
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
+    # TODO:
+    # Repleace this with the Class::MOP version 
+    # to be found in the soon to be released new
+    # Class::MOP version 
     eval { Moose::_load_all_classes($engine_class) };
     if ($@) {
         confess "Could not load engine class ($engine_class) because " . $@;
@@ -48,9 +52,52 @@ Excel::Template::Plus - An extension to the Excel::Template module
   
   $template->write_file('greeting.xls');
 
+=head1 DISCLAIMER
+
+This is the very first release of this module, it is an idea that I and 
+Rob Kinyon (the author of Excel::Template) had discussed many times, but 
+never got around to doing. This is the first attempt at bring this to 
+reality, it may change B<radically> as it evolves, so be warned.
+
 =head1 DESCRIPTION
 
-This module is an extension to the Excel::Template module. 
+This module is an extension of the Excel::Template module, which allows 
+the user to use various "engines" from which you can create Excel files
+through Excel::Template. 
+
+The idea is to use the existing (and very solid) excel file generation 
+code in Excel::Template, but to extend it's more templatey bits with more
+powerful options. 
+
+The only engine currently provided is the Template Toolkit engine, which 
+replaces Excel::Template's built in template features (the LOOP, and IF
+constructs) with the full power of TT. This is similar to the module 
+Excel::Template::TT, but expands on that even further to try and create 
+a more extensive system. 
+
+Future engine/plans include:
+
+=over 4
+
+=item Pure Perl
+
+This would allow you to write you Excel::Template files using Perl itself
+which would then output the XML for Excel::Template to consume. This would 
+be modeled after the recently released L<Template::Declare> module perhaps.
+
+=item TT Plugins/Macros/Wrappers
+
+This is basically anything which will make the TT engine easier to write
+templates for. I have experimented with some of these things, but I was not
+happy with any of them enough to release them yet. 
+
+=item HTML::Template 
+
+Excel::Template's templating features are based on HTML::Template, but the 
+HTML::Template plugins and other goodies are not compatible. This engine 
+would bring those things to Excel::Template.
+
+=back 
 
 =head1 METHODS
 
@@ -76,16 +123,11 @@ All complex software has bugs lurking in it, and this module is no
 exception. If you find a bug please either email me, or add the bug
 to cpan-RT.
 
-=head1 CODE COVERAGE
-
-I use L<Devel::Cover> to test the code coverage of my tests, below 
-is the L<Devel::Cover> report on this module's test suite.
-
 =head1 ACKNOWLEDGEMENTS
 
 =over 4
 
-=item This module was inspired by Excel::Template::TT
+=item This module came out of several discussions I had with Rob Kinyon.
 
 =back
 
