@@ -1,6 +1,16 @@
 Changes for Excel::Template::Plus
 
-0.01 
+0.02 Tues, March 13, 2007
+    * Excel::Template::Plus
+      - Now uses the Class::MOP::load_class 
+        method (bumped up the Moose dependency 
+        to make sure all is aligned)
+
+    * Excel::Template::Plus::TT
+      - removed param method and added the 
+        MooseX::Param role instead 
+
+0.01 Friday, March 2, 2007
     - initial module release
     - adapted from several in-house add-ons to 
       Excel::Template and Excel::Template::TT

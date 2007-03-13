@@ -10,8 +10,10 @@ use File::Slurp ();
 
 use Excel::Template;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
+
+with 'MooseX::Param';
 
 subtype 'IO::Handle'
     => as 'Object'
@@ -35,12 +37,6 @@ has 'config' => (
     default  => sub {{}},
 );
 
-has 'params' => (
-    is       => 'ro',
-    isa      => 'HashRef',
-    default  => sub {{}},
-);
-
 ## private attributes
 
 has '_tempfile' => (is => 'rw');
@@ -58,25 +54,6 @@ has '_excel_template' => (
         $self->_prepare_excel_template;
     }
 );
-
-sub param {
-    my $self = shift;
-    
-    # if they want the list of keys ...
-    return keys %{$self->params}  if scalar @_ == 0;
-    
-    # if they want to fetch a key ...    
-    return $self->params->{$_[0]} if scalar @_ == 1;
-    
-    # otherwise they are assigning params ...
-    ((scalar @_ % 2) == 0)
-        || confess "parameter assignment must be an even numbered list";
-    my %new = @_;
-    while (my ($key, $value) = each %new) {
-        $self->params->{$key} = $value;
-    }
-    return;
-}
 
 sub _prepare_excel_template {
     my $self = shift;
@@ -157,7 +134,7 @@ L<Excel::Template::Plus> docs for more information.
 
 =item B<template>
 
-=item B<param>
+=item B<params>
 
 =back
 

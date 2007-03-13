@@ -1,4 +1,4 @@
-Excel::Template::Plus version 0.01
+Excel::Template::Plus version 0.02
 =====================================
 
 See the individual module documentation for more information
@@ -20,7 +20,8 @@ This module requires these other modules and libraries:
     Template 
     File::Temp
     File::Slurp
-    Moose                
+    Moose    
+    MooseX::Param            
 
 The Test::Excel::Template::Plus module also requires:
 

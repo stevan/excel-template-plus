@@ -1,6 +1,7 @@
 use Module::Build;
 
 use strict;
+use warnings;
 
 my $build = Module::Build->new(
     module_name => 'Excel::Template::Plus',
@@ -10,7 +11,8 @@ my $build = Module::Build->new(
         'Template'                => '0',
         'File::Temp'              => '0',        
         'File::Slurp'             => '0',
-        'Moose'                   => '0.17',           
+        'Moose'                   => '0.18',           
+        'MooseX::Param'           => '0.01',                   
         # for Test::Excel::Template::Plus
         'Test::Deep'              => '0',
         'Spreadsheet::ParseExcel' => '0',                     

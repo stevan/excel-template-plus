@@ -2,7 +2,7 @@
 package Excel::Template::Plus;
 use Moose;
 
-our $VERSION   = '0.01';
+our $VERSION   = '0.02';
 our $AUTHORITY = 'cpan:STEVAN';
 
 sub new {
@@ -10,11 +10,8 @@ sub new {
     my %options = @_;
     
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
-    # TODO:
-    # Repleace this with the Class::MOP version 
-    # to be found in the soon to be released new
-    # Class::MOP version 
-    eval { Moose::_load_all_classes($engine_class) };
+
+    eval { Class::MOP::load_class($engine_class) };
     if ($@) {
         confess "Could not load engine class ($engine_class) because " . $@;
     }
