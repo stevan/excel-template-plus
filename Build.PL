@@ -9,8 +9,7 @@ my $build = Module::Build->new(
     requires => {
         'Excel::Template'         => '0',
         'Template'                => '0',
-        'File::Temp'              => '0',        
-        'File::Slurp'             => '0',
+        'IO::String'              => '0',
         'Moose'                   => '0.18',           
         'MooseX::Param'           => '0.01',                   
         # for Test::Excel::Template::Plus
