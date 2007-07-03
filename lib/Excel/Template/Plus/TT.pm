@@ -9,7 +9,7 @@ use IO::String ();
 
 use Excel::Template;
 
-our $VERSION   = '0.02';
+our $VERSION   = '0.03';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::Param';
@@ -36,21 +36,23 @@ has 'config' => (
     default  => sub {{}},
 );
 
-has template_object => (
-    isa => "Template",
-    is  => "rw",
-    lazy => 1,
+has '_template_object' => (
+    is      => "rw",    
+    isa     => "Template",
+    lazy    => 1,
     default => sub {
         my $self = shift;
         my $class = $self->template_class;
         Class::MOP::load_class($class);
+        ($class->isa('Template'))
+            || confess "The template_class must be Template or a subclass of it";
         $class->new( $self->config )
     }
 );
 
-has template_class => (
-    isa => "Str",
-    is  => "rw",
+has 'template_class' => (
+    is      => "rw",    
+    isa     => "Str",
     default => "Template",
 );
 
@@ -76,7 +78,7 @@ sub _prepare_excel_template {
     my $buf;
     my $fh = IO::String->new(\$buf);
 
-    my $tt = $self->template_object;
+    my $tt = $self->_template_object;
     $tt->process(
         $self->template,
         $self->params,
@@ -143,11 +145,9 @@ L<Excel::Template::Plus> docs for more information.
 
 =item B<template>
 
-=item B<params>
-
-=item B<template_object>
-
 =item B<template_class>
+
+=item B<params>
 
 =back
 
