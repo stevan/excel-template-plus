@@ -145,6 +145,10 @@ L<Excel::Template::Plus> docs for more information.
 
 =item B<params>
 
+=item B<template_object>
+
+=item B<template_class>
+
 =back
 
 =head2 Excel::Template compat methods
