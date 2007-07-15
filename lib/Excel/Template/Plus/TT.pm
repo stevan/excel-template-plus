@@ -3,13 +3,12 @@ package Excel::Template::Plus::TT;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-use FindBin;
 use Template   ();
 use IO::String ();
 
 use Excel::Template;
 
-our $VERSION   = '0.03';
+our $VERSION   = '0.04';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::Param';
