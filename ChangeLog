@@ -1,6 +1,10 @@
 Changes for Excel::Template::Plus
 
-0.04
+0.04 Mon. Dec. 31, 2007
+    * Excel::Template::Plus
+      - added example template to the docs
+        thanks to Peter Karman for this.
+        
     * Excel::Template::Plus::TT
       - removed the 'use FindBin' at the top
         which was doing nothing at all

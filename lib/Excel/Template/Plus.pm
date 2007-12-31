@@ -63,14 +63,40 @@ the user to use various "engines" from which you can create Excel files
 through Excel::Template. 
 
 The idea is to use the existing (and very solid) excel file generation 
-code in Excel::Template, but to extend it's more templatey bits with more
+code in Excel::Template, but to extend its more templatey bits with more
 powerful options. 
 
 The only engine currently provided is the Template Toolkit engine, which 
 replaces Excel::Template's built in template features (the LOOP, and IF
 constructs) with the full power of TT. This is similar to the module 
 Excel::Template::TT, but expands on that even further to try and create 
-a more extensive system. 
+a more extensive system.
+
+You can use this module to create Excel::Template-compatible XML files
+using one of the supported engines. For example, with the TT engine you
+could create a Excel::Template XML file like:
+
+  <workbook>
+    <worksheet name="[% worksheet_name %]">
+     [% my_cols = get_list_of_columns %]
+      <row>
+     [% FOR col = my_cols %]
+       <bold><cell>[% col %]</cell></bold>
+     [% END %]
+      </row>
+     [% FOR my_row = get_list_of_objects %]
+      <row>
+         [% FOR col = my_cols %]
+          <cell>[% my_row.$col %]</cell>
+         [% END %]
+      </row>
+     [% END %]
+    </worksheet>
+  </workbook>
+
+Your TT template thus creates a XML file suitable to handing over to
+Excel::Template for processing. Excel::Template::Plus simplifies
+the template-creation and handing-over process.
 
 Future engine/plans include:
 
