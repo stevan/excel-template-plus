@@ -2,7 +2,7 @@
 package Excel::Template::Plus;
 use Moose;
 
-our $VERSION   = '0.04';
+our $VERSION   = '0.05';
 our $AUTHORITY = 'cpan:STEVAN';
 
 sub new {
