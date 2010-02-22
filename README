@@ -15,12 +15,12 @@ To install this module type the following:
 DEPENDENCIES
 
 This module requires these other modules and libraries:
-                    
+
     Excel::Template
-    Template 
+    Template
     IO::String
-    Moose    
-    MooseX::Param            
+    Moose
+    MooseX::Param
 
 The Test::Excel::Template::Plus module also requires:
 
@@ -36,10 +36,10 @@ And requires these modules for testing:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2007 Infinity Interactive, Inc.
+Copyright (C) 2007-2010 Infinity Interactive, Inc.
 
 http://www.iinteractive.com
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+it under the same terms as Perl itself.
 
