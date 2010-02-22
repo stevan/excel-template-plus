@@ -21,26 +21,26 @@ my $Test = Test::Builder->new;
 
 sub cmp_excel_files ($$;$) {
     my ($file1, $file2, $msg) = @_;
-    
+
     my $excel1 = Spreadsheet::ParseExcel::Workbook->Parse($file1);
     my $excel2 = Spreadsheet::ParseExcel::Workbook->Parse($file2);
 
     ## NOTE:
-    ## Clean out some data bits that 
-    ## dont seem to actually matter. 
+    ## Clean out some data bits that
+    ## dont seem to actually matter.
     ## This is not perfect, so there
-    ## might be others when comparing 
-    ## other xls files. This works for 
+    ## might be others when comparing
+    ## other xls files. This works for
     ## me now though.
 
-    foreach (qw/File Font/) {
+    foreach (qw/File Font Format _Pos/) {
         $excel1->{$_} = undef;
         $excel2->{$_} = undef;
     }
 
     my $worksheet_count_1 = scalar @{$excel1->{Worksheet}};
-    my $worksheet_count_2 = scalar @{$excel2->{Worksheet}};    
-    
+    my $worksheet_count_2 = scalar @{$excel2->{Worksheet}};
+
     if ($worksheet_count_1 != $worksheet_count_2) {
         $Test->ok(0, $msg);
         return;
@@ -57,7 +57,7 @@ sub cmp_excel_files ($$;$) {
         $Test->ok(1, $msg);
     }
     else {
-        $Test->ok(0, $msg);        
+        $Test->ok(0, $msg);
     }
 }
 
@@ -68,7 +68,7 @@ __END__
 
 =pod
 
-=head1 NAME 
+=head1 NAME
 
 Test::Excel::Template::Plus - Testing module for use with Excel::Template::Plus
 
@@ -76,7 +76,7 @@ Test::Excel::Template::Plus - Testing module for use with Excel::Template::Plus
 
   use Test::More tests => 1;
   use Test::Excel::Template::Plus;
-  
+
   my $template = Excel::Template::Plus->new(
       engine   => 'TT',
       template => 'test.tmpl',
@@ -84,28 +84,28 @@ Test::Excel::Template::Plus - Testing module for use with Excel::Template::Plus
       params   => { ... }
   );
   $template->write_file('test.xls');
-  
-  # compare the file we just made with 
+
+  # compare the file we just made with
   # an existing example file ...
   cmp_excel_files("test.xls", "t/xls/test.xls", '... the excel files matched');
 
 =head1 DISCLAIMER
 
-This module is woefully incomplete. It works for my B<very> basic purposes right 
-now, but it is surely going to need B<lots> or work in the future to make it 
-really usable. 
+This module is woefully incomplete. It works for my B<very> basic purposes right
+now, but it is surely going to need B<lots> or work in the future to make it
+really usable.
 
 =head1 DESCRIPTION
 
-This module attempts to provide a means of testing and comparing dynamically 
-generated excel files. Currently it only supports comparing two excel files 
+This module attempts to provide a means of testing and comparing dynamically
+generated excel files. Currently it only supports comparing two excel files
 for some approximation of strutural (values within cells) and visual (formatting
-of said cells) equivalence. 
+of said cells) equivalence.
 
-As a by product of the implementation, elements may get compared which don't 
+As a by product of the implementation, elements may get compared which don't
 really need comparing, and things which do need comparing may be skipped. This
-will get refined as time goes by and the module is used in more heavyweight 
-situations. 
+will get refined as time goes by and the module is used in more heavyweight
+situations.
 
 =head1 FUNCTIONS
 
@@ -117,7 +117,7 @@ situations.
 
 =head1 BUGS
 
-All complex software has bugs lurking in it, and this module is no 
+All complex software has bugs lurking in it, and this module is no
 exception. If you find a bug please either email me, or add the bug
 to cpan-RT.
 
@@ -132,6 +132,6 @@ Copyright 2007 by Infinity Interactive, Inc.
 L<http://www.iinteractive.com>
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+it under the same terms as Perl itself.
 
 =cut
