@@ -12,6 +12,7 @@ my $build = Module::Build->new(
         'IO::String'              => '0',
         'Moose'                   => '0.18',           
         'MooseX::Param'           => '0.01',                   
+        'Module::Runtime'         => '0',
         # for Test::Excel::Template::Plus
         'Test::Deep'              => '0',
         'Spreadsheet::ParseExcel' => '0',                     

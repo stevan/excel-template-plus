@@ -1,6 +1,7 @@
 
 package Excel::Template::Plus;
 use Moose;
+use Module::Runtime ();
 
 our $VERSION   = '0.05';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -11,7 +12,7 @@ sub new {
     
     my $engine_class = 'Excel::Template::Plus::' . $options{engine};
 
-    eval { Class::MOP::load_class($engine_class) };
+    eval { Module::Runtime::use_module($engine_class) };
     if ($@) {
         confess "Could not load engine class ($engine_class) because " . $@;
     }

@@ -5,6 +5,7 @@ use Moose::Util::TypeConstraints;
 
 use Template   ();
 use IO::String ();
+use Module::Runtime ();
 
 use Excel::Template;
 
@@ -42,7 +43,7 @@ has '_template_object' => (
     default => sub {
         my $self = shift;
         my $class = $self->template_class;
-        Class::MOP::load_class($class);
+        Module::Runtime::use_module($class);
         ($class->isa('Template'))
             || confess "The template_class must be Template or a subclass of it";
         $class->new( $self->config )
