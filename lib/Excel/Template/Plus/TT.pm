@@ -9,7 +9,7 @@ use Module::Runtime ();
 
 use Excel::Template;
 
-our $VERSION   = '0.05';
+our $VERSION   = '0.06';
 our $AUTHORITY = 'cpan:STEVAN';
 
 with 'MooseX::Param';
@@ -200,11 +200,11 @@ to cpan-RT.
 
 =head1 AUTHOR
 
-Stevan Little E<lt>stevan@iinteractive.comE<gt>
+Stevan Little E<lt>stevan@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007-2010 by Infinity Interactive, Inc.
+Copyright 2007-2014 by Infinity Interactive, Inc.
 
 L<http://www.iinteractive.com>
 

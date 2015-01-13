@@ -1,4 +1,4 @@
-Excel::Template::Plus version 0.04
+Excel::Template::Plus version 0.06
 =====================================
 
 See the individual module documentation for more information
@@ -36,7 +36,7 @@ And requires these modules for testing:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2007-2010 Infinity Interactive, Inc.
+Copyright (C) 2007-2014 Infinity Interactive, Inc.
 
 http://www.iinteractive.com
 
